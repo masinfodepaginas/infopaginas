@@ -1,58 +1,286 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galería</title>
-
-<style>
-body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#111;
-    color:white;
-    text-align:center;
-}
-
-h1{
-    padding:30px 0;
-}
-
-.galeria{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap:20px;
-    padding:20px;
-}
-
-.galeria img{
-    width:100%;
-    border-radius:12px;
-    object-fit:cover;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catálogo</title>
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --card:#121622;
+      --muted:#9aa4b2;
+      --text:#e7ecf3;
+      --line:rgba(255,255,255,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, #1a2040 0%, transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, #2a1a3b 0%, transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(11,13,18,.65);
+      border-bottom:1px solid var(--line);
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:18px 16px;}
+    .top{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    h1{margin:0; font-size:18px; letter-spacing:.2px;}
+    .hint{color:var(--muted); font-size:13px;}
+    .search{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    input{
+      width:min(380px, 90vw);
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0f1320;
+      color:var(--text);
+      outline:none;
+    }
+    input::placeholder{color:#7f8aa0}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap:14px;
+      padding:18px 0 40px;
+    }
+    @media (min-width: 880px){
+      .grid{grid-template-columns: repeat(2, 1fr);}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+    }
+    .card-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+    }
+    .badge{
+      font-size:12px; color:var(--muted);
+    }
+    .pair{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      padding:14px;
+    }
+    @media (min-width: 520px){
+      .pair{grid-template-columns: 1fr 1fr;}
+    }
+    .slot{
+      background:#0f1320;
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+    }
+    .slot-title{
+      font-size:12px;
+      padding:10px 10px;
+      color:var(--muted);
+      border-bottom:1px solid var(--line);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .slot img{
+      display:block;
+      width:100%;
+      height:auto;
+      cursor: zoom-in;
+    }
+    .actions{
+      padding:0 14px 14px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:#0f1320;
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:13px;
+      text-decoration:none;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      cursor:pointer;
+    }
+    .btn:hover{border-color: rgba(255,255,255,.18)}
+    .btn.secondary{color:var(--muted)}
+    /* modal */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      background:rgba(0,0,0,.72);
+      z-index:100;
+      padding:24px 14px;
+    }
+    .modal.open{display:block}
+    .modal-inner{
+      max-width:1100px;
+      margin:0 auto;
+      background:#0b0d12;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+    }
+    .modal-bar{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .modal-img{
+      width:100%;
+      height:auto;
+      display:block;
+      background:#000;
+      cursor: zoom-out;
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <h1>Catálogo</h1>
+          <div class="hint">Cada tarjeta muestra <b>Links</b> y <b>Precios</b>. Click en una imagen para agrandarla.</div>
+        </div>
+        <div class="search">
+          <input id="q" type="text" placeholder="Buscar por número (ej: 03, 12)..." />
+          <div class="hint" id="count"></div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-<h1>Galería</h1>
+  <main class="wrap">
+    <div class="grid" id="grid"></div>
+  </main>
 
-<div class="galeria">
-    <img src="foto1.jpg">
-    <img src="foto2.jpg">
-    <img src="foto3.jpg">
-    <img src="foto4.jpg">
-    <img src="foto5.jpg">
-    <img src="foto6.jpg">
-    <img src="foto7.jpg">
-    <img src="foto8.jpg">
-    <img src="foto9.jpg">
-    <img src="foto10.jpg">
-    <img src="foto11.jpg">
-    <img src="foto12.jpg">
-    <img src="foto13.jpg">
-    <img src="foto14.jpg">
-</div>
+  <!-- Modal para zoom -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-inner">
+      <div class="modal-bar">
+        <span id="modalTitle">Vista</span>
+        <button class="btn" id="closeBtn">Cerrar ✕</button>
+      </div>
+      <img id="modalImg" class="modal-img" alt="Vista ampliada" />
+    </div>
+  </div>
 
+  <script>
+    // Cambiá esto si tu carpeta no se llama "img"
+    const IMG_DIR = "img";
+
+    // Genera automáticamente del 1 al 14
+    const items = Array.from({length: 14}, (_, i) => {
+      const n = String(i + 1).padStart(2, "0");
+      return {
+        id: n,
+        linksImg: `${IMG_DIR}/c${n}_links.jpg`,
+        preciosImg: `${IMG_DIR}/c${n}_precios.jpg`,
+      };
+    });
+
+    const grid = document.getElementById("grid");
+    const q = document.getElementById("q");
+    const count = document.getElementById("count");
+
+    function render(list){
+      grid.innerHTML = "";
+      list.forEach(it => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-head">
+            <div><b>Combo ${it.id}</b></div>
+            <div class="badge">c${it.id}_links / c${it.id}_precios</div>
+          </div>
+
+          <div class="pair">
+            <div class="slot">
+              <div class="slot-title">
+                <span>Links</span>
+                <span>Click para zoom</span>
+              </div>
+              <img src="${it.linksImg}" alt="Links ${it.id}" data-title="Combo ${it.id} — Links" />
+            </div>
+
+            <div class="slot">
+              <div class="slot-title">
+                <span>Precios</span>
+                <span>Click para zoom</span>
+              </div>
+              <img src="${it.preciosImg}" alt="Precios ${it.id}" data-title="Combo ${it.id} — Precios" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <a class="btn secondary" href="${it.linksImg}" target="_blank" rel="noopener">Abrir Links en nueva pestaña</a>
+            <a class="btn secondary" href="${it.preciosImg}" target="_blank" rel="noopener">Abrir Precios en nueva pestaña</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // click-zoom
+      grid.querySelectorAll("img").forEach(img => {
+        img.addEventListener("click", () => openModal(img.src, img.dataset.title || "Vista"));
+      });
+
+      count.textContent = `${list.length} / ${items.length}`;
+    }
+
+    // busqueda simple por numero
+    q.addEventListener("input", () => {
+      const term = q.value.trim();
+      if(!term) return render(items);
+      const filtered = items.filter(it => it.id.includes(term));
+      render(filtered);
+    });
+
+    // modal
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalTitle = document.getElementById("modalTitle");
+    const closeBtn = document.getElementById("closeBtn");
+
+    function openModal(src, title){
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      modalImg.src = src;
+      modalTitle.textContent = title;
+    }
+    function closeModal(){
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      modalImg.src = "";
+    }
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if(e.target === modal || e.target === modalImg) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeModal();
+    });
+
+    // inicial
+    render(items);
+  </script>
 </body>
 </html>
