@@ -4,165 +4,345 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Catálogo</title>
+
   <style>
     :root{
-      --bg:#0b0d12;
-      --card:#121622;
-      --muted:#9aa4b2;
-      --text:#e7ecf3;
+      /* Paleta moderna oscura (enterprise) */
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F172A;
+      --card2:#0B1224;
       --line:rgba(255,255,255,.08);
+      --line2:rgba(255,255,255,.12);
+      --text:#EAF0FF;
+      --muted:#A6B0C3;
+      --muted2:#7F8AA3;
+
       --radius:18px;
+      --radius2:14px;
+      --shadow: 0 18px 60px rgba(0,0,0,.40);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+
+      --accent:#7C3AED; /* violeta pro */
+      --accent2:#22D3EE; /* cian */
     }
+
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, #1a2040 0%, transparent 55%),
-                  radial-gradient(900px 500px at 90% 10%, #2a1a3b 0%, transparent 60%),
-                  var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
+      background:
+        radial-gradient(1100px 600px at 15% -10%, rgba(124,58,237,.28) 0%, transparent 55%),
+        radial-gradient(900px 500px at 95% 0%, rgba(34,211,238,.18) 0%, transparent 55%),
+        radial-gradient(700px 450px at 70% 110%, rgba(124,58,237,.10) 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
     }
+
+    /* Contenedor */
+    .wrap{max-width:1200px; margin:0 auto; padding:18px 16px 40px;}
+
+    /* Header sticky moderno */
     header{
-      position:sticky; top:0; z-index:10;
-      backdrop-filter: blur(10px);
-      background: rgba(11,13,18,.65);
+      position:sticky; top:0; z-index:50;
+      background: rgba(7,10,18,.62);
+      backdrop-filter: blur(12px);
       border-bottom:1px solid var(--line);
     }
-    .wrap{max-width:1100px; margin:0 auto; padding:18px 16px;}
     .top{
-      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
       flex-wrap:wrap;
     }
-    h1{margin:0; font-size:18px; letter-spacing:.2px;}
-    .hint{color:var(--muted); font-size:13px;}
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width:260px;
+    }
+    .logoDot{
+      width:12px; height:12px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 6px rgba(124,58,237,.10);
+      flex:0 0 auto;
+    }
+    h1{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
+      line-height:1.2;
+    }
+    .sub{
+      margin-top:3px;
+      font-size:12.5px;
+      color:var(--muted2);
+    }
+
+    /* Barra derecha: buscar + contador */
+    .controls{
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    }
     .search{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-    }
-    input{
-      width:min(380px, 90vw);
-      padding:12px 14px;
-      border-radius:12px;
+      display:flex; align-items:center; gap:10px;
+      background: rgba(15,23,42,.65);
       border:1px solid var(--line);
-      background:#0f1320;
-      color:var(--text);
-      outline:none;
+      border-radius:999px;
+      padding:10px 12px;
+      box-shadow: var(--shadow2);
     }
-    input::placeholder{color:#7f8aa0}
+    .search svg{opacity:.9}
+    input{
+      width:min(420px, 78vw);
+      border:0;
+      outline:none;
+      background: transparent;
+      color:var(--text);
+      font-size:13.5px;
+    }
+    input::placeholder{color:rgba(166,176,195,.65)}
+    .count{
+      font-size:12.5px;
+      color:var(--muted);
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(15,23,42,.45);
+    }
+
+    /* Grid: tarjetas consistentes */
     .grid{
       display:grid;
-      grid-template-columns: repeat(1, 1fr);
-      gap:14px;
-      padding:18px 0 40px;
+      grid-template-columns: 1fr;
+      gap:16px;
+      padding-top:18px;
     }
-    @media (min-width: 880px){
-      .grid{grid-template-columns: repeat(2, 1fr);}
+    @media (min-width: 900px){
+      .grid{grid-template-columns: 1fr 1fr;}
     }
+
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), var(--card);
       border:1px solid var(--line);
       border-radius: var(--radius);
+      background:
+        radial-gradient(800px 220px at 30% 0%, rgba(124,58,237,.10) 0%, transparent 55%),
+        radial-gradient(800px 220px at 90% 0%, rgba(34,211,238,.08) 0%, transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.04), transparent 22%),
+        var(--card);
+      box-shadow: var(--shadow);
       overflow:hidden;
-      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      position:relative;
     }
+
     .card-head{
       display:flex; align-items:center; justify-content:space-between;
-      padding:14px 14px 10px;
+      gap:10px;
+      padding:14px 14px 12px;
       border-bottom:1px solid var(--line);
     }
-    .badge{
-      font-size:12px; color:var(--muted);
+    .title{
+      display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
     }
+    .title b{font-size:15px}
+    .chip{
+      font-size:11.5px;
+      color:rgba(234,240,255,.78);
+      background: rgba(124,58,237,.12);
+      border:1px solid rgba(124,58,237,.22);
+      padding:4px 10px;
+      border-radius:999px;
+    }
+    .badge{
+      font-size:11.5px;
+      color:rgba(166,176,195,.85);
+      white-space:nowrap;
+    }
+
+    /* Dos paneles (Links / Precios) iguales */
     .pair{
       display:grid;
       grid-template-columns: 1fr;
-      gap:10px;
+      gap:12px;
       padding:14px;
     }
-    @media (min-width: 520px){
+    @media (min-width: 560px){
       .pair{grid-template-columns: 1fr 1fr;}
     }
-    .slot{
-      background:#0f1320;
+
+    .panel{
       border:1px solid var(--line);
-      border-radius:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), transparent 28%), var(--card2);
+      border-radius: var(--radius2);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 340px; /* estabilidad visual */
+    }
+    .panel-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.2px;
+    }
+    .panel-head .left{
+      display:flex; align-items:center; gap:8px;
+      color:rgba(234,240,255,.86);
+      font-weight:600;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity:.9;
+    }
+
+    /* Marco de imagen uniforme (clave para prolijidad) */
+    .frame{
+      margin:12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+        rgba(255,255,255,.03);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height: 240px;     /* MISMA ALTURA SIEMPRE */
+      padding:12px;
       overflow:hidden;
     }
-    .slot-title{
-      font-size:12px;
-      padding:10px 10px;
-      color:var(--muted);
-      border-bottom:1px solid var(--line);
-      display:flex; justify-content:space-between; align-items:center;
-    }
-    .slot img{
+    .frame img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain; /* no distorsiona */
       display:block;
-      width:100%;
-      height:auto;
       cursor: zoom-in;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+      user-select:none;
+      -webkit-user-drag:none;
     }
-    .actions{
-      padding:0 14px 14px;
-      display:flex; gap:10px; flex-wrap:wrap;
+
+    .panel-actions{
+      margin-top:auto;
+      padding:12px;
+      border-top:1px solid var(--line);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
     }
+
+    /* Botones profesionales */
     .btn{
-      border:1px solid var(--line);
-      background:#0f1320;
-      color:var(--text);
+      appearance:none;
+      border:1px solid var(--line2);
+      background: rgba(15,23,42,.55);
+      color: rgba(234,240,255,.92);
       padding:10px 12px;
-      border-radius:12px;
+      border-radius: 12px;
       font-size:13px;
       text-decoration:none;
       display:inline-flex;
-      gap:8px;
       align-items:center;
+      gap:8px;
       cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
     }
-    .btn:hover{border-color: rgba(255,255,255,.18)}
-    .btn.secondary{color:var(--muted)}
-    /* modal */
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.20);
+      background: rgba(15,23,42,.70);
+    }
+    .btn.primary{
+      border-color: rgba(124,58,237,.35);
+      background: rgba(124,58,237,.14);
+    }
+    .btn.primary:hover{
+      border-color: rgba(124,58,237,.55);
+      background: rgba(124,58,237,.20);
+    }
+
+    /* Modal zoom pro */
     .modal{
       position:fixed; inset:0;
       display:none;
-      background:rgba(0,0,0,.72);
-      z-index:100;
-      padding:24px 14px;
+      background: rgba(0,0,0,.78);
+      z-index:200;
+      padding:22px 14px;
     }
     .modal.open{display:block}
     .modal-inner{
-      max-width:1100px;
+      max-width:1200px;
       margin:0 auto;
-      background:#0b0d12;
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius: 18px;
       overflow:hidden;
+      background: rgba(7,10,18,.86);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 30px 110px rgba(0,0,0,.60);
     }
     .modal-bar{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:12px 14px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      padding:12px 12px;
       border-bottom:1px solid var(--line);
       color:var(--muted);
       font-size:13px;
+    }
+    .modal-title{
+      display:flex; align-items:center; gap:10px;
+      color:rgba(234,240,255,.88);
+      font-weight:600;
+    }
+    .modal-img-wrap{
+      background: #050712;
+      padding: 12px;
     }
     .modal-img{
       width:100%;
       height:auto;
       display:block;
-      background:#000;
+      border-radius: 14px;
       cursor: zoom-out;
+      user-select:none;
+      -webkit-user-drag:none;
     }
+
+    /* Footer discreto */
+    .footer{
+      margin-top:18px;
+      color: rgba(166,176,195,.70);
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .sep{opacity:.6}
   </style>
 </head>
+
 <body>
   <header>
     <div class="wrap">
       <div class="top">
-        <div>
-          <h1>Catálogo</h1>
-          <div class="hint">Cada tarjeta muestra <b>Links</b> y <b>Precios</b>. Click en una imagen para agrandarla.</div>
+        <div class="brand">
+          <div class="logoDot"></div>
+          <div>
+            <h1>Catálogo</h1>
+            <div class="sub">Links + Precios por combo. Click en una imagen para verla en grande.</div>
+          </div>
         </div>
-        <div class="search">
-          <input id="q" type="text" placeholder="Buscar por número (ej: 03, 12)..." />
-          <div class="hint" id="count"></div>
+
+        <div class="controls">
+          <div class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 21l-4.3-4.3m1.3-5.2a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input id="q" type="text" placeholder="Buscar combo (ej: 03, 12)..." />
+          </div>
+          <div class="count" id="count">—</div>
         </div>
       </div>
     </div>
@@ -170,25 +350,33 @@
 
   <main class="wrap">
     <div class="grid" id="grid"></div>
+
+    <div class="footer">
+      <div>Consejo: usá el buscador para encontrar rápido un combo.</div>
+      <div class="sep">•</div>
+      <div id="last">—</div>
+    </div>
   </main>
 
-  <!-- Modal para zoom -->
+  <!-- Modal zoom -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-inner">
       <div class="modal-bar">
-        <span id="modalTitle">Vista</span>
+        <div class="modal-title"><span class="dot"></span><span id="modalTitle">Vista</span></div>
         <button class="btn" id="closeBtn">Cerrar ✕</button>
       </div>
-      <img id="modalImg" class="modal-img" alt="Vista ampliada" />
+      <div class="modal-img-wrap">
+        <img id="modalImg" class="modal-img" alt="Vista ampliada" />
+      </div>
     </div>
   </div>
 
   <script>
-    // Cambiá esto si tu carpeta no se llama "img"
-   const IMG_DIR = "imagenes";
+    // ✅ Tu carpeta real es "imagenes"
+    const IMG_DIR = "imagenes";
 
     // Genera automáticamente del 1 al 14
-    const items = Array.from({length: 14}, (_, i) => {
+    const items = Array.from({ length: 14 }, (_, i) => {
       const n = String(i + 1).padStart(2, "0");
       return {
         id: n,
@@ -200,53 +388,82 @@
     const grid = document.getElementById("grid");
     const q = document.getElementById("q");
     const count = document.getElementById("count");
+    const last = document.getElementById("last");
 
     function render(list){
       grid.innerHTML = "";
+
       list.forEach(it => {
         const card = document.createElement("div");
         card.className = "card";
+
         card.innerHTML = `
           <div class="card-head">
-            <div><b>Combo ${it.id}</b></div>
+            <div class="title">
+              <b>Combo ${it.id}</b>
+              <span class="chip">2 vistas</span>
+            </div>
             <div class="badge">c${it.id}_links / c${it.id}_precios</div>
           </div>
 
           <div class="pair">
-            <div class="slot">
-              <div class="slot-title">
-                <span>Links</span>
-                <span>Click para zoom</span>
+            <div class="panel">
+              <div class="panel-head">
+                <div class="left"><span class="dot"></span>Links</div>
+                <div>Click para ampliar</div>
               </div>
-              <img src="${it.linksImg}" alt="Links ${it.id}" data-title="Combo ${it.id} — Links" />
+              <div class="frame">
+                <img src="${it.linksImg}" alt="Links ${it.id}" data-title="Combo ${it.id} — Links" loading="lazy"/>
+              </div>
+              <div class="panel-actions">
+                <a class="btn primary" href="${it.linksImg}" target="_blank" rel="noopener">Abrir Links</a>
+                <button class="btn" data-copy="${it.linksImg}">Copiar URL</button>
+              </div>
             </div>
 
-            <div class="slot">
-              <div class="slot-title">
-                <span>Precios</span>
-                <span>Click para zoom</span>
+            <div class="panel">
+              <div class="panel-head">
+                <div class="left"><span class="dot"></span>Precios</div>
+                <div>Click para ampliar</div>
               </div>
-              <img src="${it.preciosImg}" alt="Precios ${it.id}" data-title="Combo ${it.id} — Precios" />
+              <div class="frame">
+                <img src="${it.preciosImg}" alt="Precios ${it.id}" data-title="Combo ${it.id} — Precios" loading="lazy"/>
+              </div>
+              <div class="panel-actions">
+                <a class="btn primary" href="${it.preciosImg}" target="_blank" rel="noopener">Abrir Precios</a>
+                <button class="btn" data-copy="${it.preciosImg}">Copiar URL</button>
+              </div>
             </div>
-          </div>
-
-          <div class="actions">
-            <a class="btn secondary" href="${it.linksImg}" target="_blank" rel="noopener">Abrir Links en nueva pestaña</a>
-            <a class="btn secondary" href="${it.preciosImg}" target="_blank" rel="noopener">Abrir Precios en nueva pestaña</a>
           </div>
         `;
+
         grid.appendChild(card);
       });
 
-      // click-zoom
-      grid.querySelectorAll("img").forEach(img => {
+      // Zoom
+      grid.querySelectorAll(".frame img").forEach(img => {
         img.addEventListener("click", () => openModal(img.src, img.dataset.title || "Vista"));
+      });
+
+      // Copiar URL
+      grid.querySelectorAll("button[data-copy]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const url = btn.getAttribute("data-copy");
+          try{
+            await navigator.clipboard.writeText(url);
+            const old = btn.textContent;
+            btn.textContent = "Copiado ✓";
+            setTimeout(()=> btn.textContent = old, 900);
+          }catch(e){
+            alert("No pude copiar automáticamente. Copiá este link:\n" + url);
+          }
+        });
       });
 
       count.textContent = `${list.length} / ${items.length}`;
     }
 
-    // busqueda simple por numero
+    // Búsqueda por número
     q.addEventListener("input", () => {
       const term = q.value.trim();
       if(!term) return render(items);
@@ -254,7 +471,7 @@
       render(filtered);
     });
 
-    // modal
+    // Modal
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modalImg");
     const modalTitle = document.getElementById("modalTitle");
@@ -262,13 +479,13 @@
 
     function openModal(src, title){
       modal.classList.add("open");
-      modal.setAttribute("aria-hidden", "false");
+      modal.setAttribute("aria-hidden","false");
       modalImg.src = src;
       modalTitle.textContent = title;
     }
     function closeModal(){
       modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
+      modal.setAttribute("aria-hidden","true");
       modalImg.src = "";
     }
     closeBtn.addEventListener("click", closeModal);
@@ -279,8 +496,11 @@
       if(e.key === "Escape") closeModal();
     });
 
-    // inicial
+    // Render inicial
     render(items);
+
+    // Footer info
+    last.textContent = "Publicación: " + new Date().toLocaleString("es-AR");
   </script>
 </body>
 </html>
