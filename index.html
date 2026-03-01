@@ -7,7 +7,6 @@
 
   <style>
     :root{
-      /* Moderno oscuro, sobrio, enterprise */
       --bg0:#070A12;
       --bg1:#0A1020;
       --card:#0F172A;
@@ -150,7 +149,7 @@
       overflow:hidden;
       display:flex;
       flex-direction:column;
-      min-height: 330px; /* estabilidad */
+      min-height: 330px;
     }
 
     .panel-head{
@@ -172,7 +171,6 @@
       opacity:.9;
     }
 
-    /* Marco uniforme para que no se vea desprolijo */
     .frame{
       margin:12px;
       border-radius: 14px;
@@ -237,7 +235,6 @@
       background: rgba(124,58,237,.20);
     }
 
-    /* Modal zoom */
     .modal{
       position:fixed; inset:0;
       display:none;
@@ -304,7 +301,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M21 21l-4.3-4.3m1.3-5.2a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <input id="q" type="text" placeholder="Buscar por nombre o número (ej: 03, ganamos)..." />
+            <input id="q" type="text" placeholder="Buscar por nombre o número (ej: 01, ganamos)..." />
           </div>
           <div class="count" id="count">—</div>
         </div>
@@ -316,7 +313,6 @@
     <div class="grid" id="grid"></div>
   </main>
 
-  <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-inner">
       <div class="modal-bar">
@@ -330,37 +326,35 @@
   </div>
 
   <script>
-    // ✅ Tu carpeta real
     const IMG_DIR = "imagenes";
 
-    // ✅ Nombres EXACTOS que pediste (1..14)
-    const NAMES = [
-      "multi panel infinit",
-      "oro puro",
-      "fortuna total",
-      "multi panel grupo 91",
-      "multiskin",
-      "agentes bet paneles blancos",
-      "agentes bet lat",
-      "gana en casa",
-      "gran poseidon",
-      "multi panel con recupero",
-      "kona bet",
-      "ganamos",
-      "zeus",
-      "multi panel sin recupero"
+    // Reorden: GANAMOS (antes #12) ahora va primero, el resto detrás manteniendo su orden.
+    // Ojo: NO renombramos archivos. Solo mostramos nombres y “ID visual”.
+    const ORDER = [
+      { fileId: "12", displayId: "01", name: "ganamos" },
+
+      { fileId: "01", displayId: "02", name: "multi panel infinit" },
+      { fileId: "02", displayId: "03", name: "oro puro" },
+      { fileId: "03", displayId: "04", name: "fortuna total" },
+      { fileId: "04", displayId: "05", name: "multi panel grupo 91" },
+      { fileId: "05", displayId: "06", name: "multiskin" },
+      { fileId: "06", displayId: "07", name: "agentes bet paneles blancos" },
+      { fileId: "07", displayId: "08", name: "agentes bet lat" },
+      { fileId: "08", displayId: "09", name: "gana en casa" },
+      { fileId: "09", displayId: "10", name: "gran poseidon" },
+      { fileId: "10", displayId: "11", name: "multi panel con recupero" },
+      { fileId: "11", displayId: "12", name: "kona bet" },
+      { fileId: "13", displayId: "13", name: "zeus" },
+      { fileId: "14", displayId: "14", name: "multi panel sin recupero" }
     ];
 
-    // Genera los items del 01 al 14
-    const items = Array.from({ length: 14 }, (_, i) => {
-      const n = String(i + 1).padStart(2, "0");
-      return {
-        id: n,
-        name: NAMES[i] || ("combo " + n),
-        linksImg: `${IMG_DIR}/c${n}_links.jpg`,
-        preciosImg: `${IMG_DIR}/c${n}_precios.jpg`,
-      };
-    });
+    const items = ORDER.map(o => ({
+      displayId: o.displayId,     // lo que ve el cliente
+      fileId: o.fileId,           // qué archivo cXX usamos
+      name: o.name,
+      linksImg: `${IMG_DIR}/c${o.fileId}_links.jpg`,
+      preciosImg: `${IMG_DIR}/c${o.fileId}_precios.jpg`,
+    }));
 
     const grid = document.getElementById("grid");
     const q = document.getElementById("q");
@@ -401,9 +395,9 @@
           <div class="card-head">
             <div class="title">
               <b>${it.name}</b>
-              <span>ID: ${it.id}</span>
+              <span>ID: ${it.displayId}</span>
             </div>
-            <div class="badge">Combo ${it.id}</div>
+            <div class="badge">Combo ${it.displayId}</div>
           </div>
 
           <div class="pair">
@@ -413,7 +407,7 @@
                 <div>Click para ampliar</div>
               </div>
               <div class="frame">
-                <img src="${it.linksImg}" alt="Links ${it.id}" data-title="${it.name} — Links" loading="lazy"/>
+                <img src="${it.linksImg}" alt="Links ${it.displayId}" data-title="${it.name} — Links" loading="lazy"/>
               </div>
               <div class="actions">
                 <a class="btn primary" href="${it.linksImg}" target="_blank" rel="noopener">Abrir Links</a>
@@ -426,7 +420,7 @@
                 <div>Click para ampliar</div>
               </div>
               <div class="frame">
-                <img src="${it.preciosImg}" alt="Precios ${it.id}" data-title="${it.name} — Precios" loading="lazy"/>
+                <img src="${it.preciosImg}" alt="Precios ${it.displayId}" data-title="${it.name} — Precios" loading="lazy"/>
               </div>
               <div class="actions">
                 <a class="btn primary" href="${it.preciosImg}" target="_blank" rel="noopener">Abrir Precios</a>
@@ -434,11 +428,9 @@
             </div>
           </div>
         `;
-
         grid.appendChild(card);
       });
 
-      // click zoom
       grid.querySelectorAll(".frame img").forEach(img => {
         img.addEventListener("click", () => openModal(img.src, img.dataset.title || "Vista"));
       });
@@ -446,14 +438,15 @@
       count.textContent = `${list.length} / ${items.length}`;
     }
 
-    // búsqueda por nombre o número
     q.addEventListener("input", () => {
       const term = q.value.trim().toLowerCase();
       if(!term) return render(items);
 
-      const filtered = items.filter(it => {
-        return it.id.includes(term) || it.name.toLowerCase().includes(term);
-      });
+      const filtered = items.filter(it =>
+        it.displayId.includes(term) ||
+        it.fileId.includes(term) ||
+        it.name.toLowerCase().includes(term)
+      );
       render(filtered);
     });
 
