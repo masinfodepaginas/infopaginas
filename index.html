@@ -7,31 +7,27 @@
 
   <style>
     :root{
-      /* Enterprise dark (sobrio, legible) */
+      /* Moderno oscuro, sobrio, enterprise */
       --bg0:#070A12;
       --bg1:#0A1020;
-      --panel:#0E172A;
-      --panel2:#0B1326;
+      --card:#0F172A;
+      --card2:#0B1326;
       --line:rgba(255,255,255,.08);
       --line2:rgba(255,255,255,.12);
       --text:#EAF0FF;
       --muted:#A9B3C7;
       --muted2:#7F8AA3;
 
-      --accent:#7C3AED;     /* violeta */
-      --accent2:#22D3EE;    /* cian */
+      --accent:#7C3AED;
+      --accent2:#22D3EE;
 
       --r:18px;
       --r2:14px;
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --shadow2: 0 10px 30px rgba(0,0,0,.35);
-
-      --max: 1280px;
-      --sidebar: 320px;
+      --shadow: 0 18px 60px rgba(0,0,0,.42);
+      --shadow2: 0 10px 30px rgba(0,0,0,.34);
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -42,19 +38,20 @@
         linear-gradient(180deg, var(--bg0), var(--bg1));
     }
 
-    /* Header */
     header{
       position:sticky; top:0; z-index:50;
       background: rgba(7,10,18,.62);
       backdrop-filter: blur(12px);
       border-bottom:1px solid var(--line);
     }
-    .wrap{max-width:var(--max); margin:0 auto; padding:14px 16px;}
+
+    .wrap{max-width:1200px; margin:0 auto; padding:16px;}
     .top{
       display:flex; align-items:center; justify-content:space-between;
       gap:12px; flex-wrap:wrap;
     }
-    .brand{display:flex; align-items:center; gap:12px; min-width:240px;}
+
+    .brand{display:flex; align-items:center; gap:12px;}
     .dot{
       width:12px; height:12px; border-radius:999px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -64,219 +61,156 @@
     h1{margin:0; font-size:16px; letter-spacing:.2px; line-height:1.1;}
     .sub{margin-top:3px; font-size:12.5px; color:var(--muted2);}
 
-    .headerRight{
+    .controls{
       display:flex; align-items:center; gap:10px; flex-wrap:wrap;
     }
-    .pill{
-      border:1px solid var(--line);
-      background: rgba(14,23,42,.55);
-      padding:8px 12px;
-      border-radius:999px;
-      color:var(--muted);
-      font-size:12.5px;
-    }
-
-    /* Layout */
-    .layout{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:16px;
-      display:grid;
-      grid-template-columns: var(--sidebar) 1fr;
-      gap:16px;
-    }
-    @media (max-width: 980px){
-      .layout{grid-template-columns: 1fr;}
-    }
-
-    /* Sidebar */
-    .side{
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 22%), var(--panel2);
-      border-radius: var(--r);
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-      position:sticky;
-      top:72px;
-      height: calc(100vh - 88px);
-      display:flex;
-      flex-direction:column;
-    }
-    @media (max-width: 980px){
-      .side{position:relative; top:auto; height:auto;}
-    }
-
-    .sideHead{
-      padding:12px 12px 10px;
-      border-bottom:1px solid var(--line);
-      display:flex; flex-direction:column; gap:10px;
-    }
-
     .search{
       display:flex; align-items:center; gap:10px;
       border:1px solid var(--line);
-      background: rgba(14,23,42,.55);
-      border-radius: 12px;
-      padding:10px 10px;
+      background: rgba(15,23,42,.60);
+      border-radius: 999px;
+      padding:10px 12px;
+      box-shadow: var(--shadow2);
     }
     .search input{
-      width:100%;
+      width:min(420px, 78vw);
       border:0; outline:none;
       background:transparent;
       color:var(--text);
       font-size:13.5px;
     }
     .search input::placeholder{color:rgba(169,179,199,.55)}
-    .sideMeta{
-      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      color:var(--muted2);
-      font-size:12px;
-    }
-
-    .list{
-      overflow:auto;
-      padding:10px;
-      display:grid;
-      gap:8px;
-    }
-
-    .item{
+    .count{
+      font-size:12.5px;
+      color:var(--muted);
+      padding:8px 12px;
       border:1px solid var(--line);
-      background: rgba(14,23,42,.45);
-      border-radius: 14px;
-      padding:10px 10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+      border-radius:999px;
+      background: rgba(15,23,42,.45);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:16px;
+      padding:18px 0 40px;
+    }
+    @media (min-width: 920px){
+      .grid{grid-template-columns: 1fr 1fr;}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      background:
+        radial-gradient(800px 220px at 30% 0%, rgba(124,58,237,.10) 0%, transparent 55%),
+        radial-gradient(800px 220px at 90% 0%, rgba(34,211,238,.08) 0%, transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.04), transparent 22%),
+        var(--card);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-head{
+      display:flex; align-items:center; justify-content:space-between;
       gap:10px;
-      cursor:pointer;
-      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      padding:14px 14px 12px;
+      border-bottom:1px solid var(--line);
     }
-    .item:hover{
-      transform: translateY(-1px);
-      border-color: rgba(255,255,255,.18);
-      background: rgba(14,23,42,.65);
+    .title{
+      display:flex; flex-direction:column; gap:3px;
+      min-width: 220px;
     }
-    .item.active{
-      border-color: rgba(124,58,237,.45);
-      background: rgba(124,58,237,.12);
-    }
-    .itemLeft{
-      display:flex; flex-direction:column; gap:2px;
-    }
-    .itemTitle{
-      font-weight:700;
-      font-size:13.5px;
-      letter-spacing:.2px;
-    }
-    .itemSub{
-      font-size:12px;
-      color:rgba(169,179,199,.78);
-    }
-    .chip{
+    .title b{font-size:15px; letter-spacing:.2px;}
+    .title span{font-size:12.5px; color:var(--muted2);}
+    .badge{
       font-size:11.5px;
-      color:rgba(234,240,255,.80);
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.15);
-      padding:4px 9px;
+      color:rgba(169,179,199,.80);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      padding:4px 10px;
       border-radius:999px;
       white-space:nowrap;
     }
 
-    /* Main viewer */
-    .main{
-      border:1px solid var(--line);
-      border-radius: var(--r);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 22%), var(--panel);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      min-height: 520px;
-      display:flex;
-      flex-direction:column;
-    }
-
-    .mainHead{
-      padding:14px;
-      border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; flex-wrap:wrap;
-    }
-    .mainTitle{
-      display:flex; flex-direction:column; gap:2px;
-    }
-    .mainTitle b{font-size:16px; letter-spacing:.2px;}
-    .mainTitle span{font-size:12.5px; color:var(--muted2);}
-    .tabs{
-      display:flex; gap:8px; flex-wrap:wrap;
-    }
-    .tab{
-      border:1px solid var(--line2);
-      background: rgba(14,23,42,.45);
-      color:rgba(234,240,255,.92);
-      padding:9px 12px;
-      border-radius: 12px;
-      font-size:13px;
-      cursor:pointer;
-      transition: transform .12s ease, border-color .12s ease, background .12s ease;
-      user-select:none;
-    }
-    .tab:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.20); background: rgba(14,23,42,.65);}
-    .tab.active{
-      border-color: rgba(124,58,237,.55);
-      background: rgba(124,58,237,.16);
-    }
-
-    .viewer{
-      padding:14px;
+    .pair{
       display:grid;
       grid-template-columns: 1fr;
       gap:12px;
+      padding:14px;
+    }
+    @media (min-width: 560px){
+      .pair{grid-template-columns: 1fr 1fr;}
     }
 
-    /* Imagen grande, uniforme, legible */
+    .panel{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), transparent 28%), var(--card2);
+      border-radius: var(--r2);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 330px; /* estabilidad */
+    }
+
+    .panel-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.2px;
+    }
+    .panel-head .left{
+      display:flex; align-items:center; gap:8px;
+      color:rgba(234,240,255,.86);
+      font-weight:700;
+    }
+    .miniDot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity:.9;
+    }
+
+    /* Marco uniforme para que no se vea desprolijo */
     .frame{
+      margin:12px;
+      border-radius: 14px;
       border:1px solid rgba(255,255,255,.10);
       background:
         linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
         rgba(255,255,255,.03);
-      border-radius: var(--r);
-      overflow:hidden;
-      padding:12px;
-    }
-    .imgBox{
-      border-radius: 14px;
-      background:#050712;
-      border:1px solid rgba(255,255,255,.08);
-      height: min(70vh, 640px);  /* GRANDE */
+      height: 240px;
       display:flex;
       align-items:center;
       justify-content:center;
       padding:12px;
       overflow:hidden;
     }
-    .imgBox img{
+    .frame img{
       max-width:100%;
       max-height:100%;
       object-fit:contain;
       display:block;
       cursor: zoom-in;
-      filter: drop-shadow(0 14px 24px rgba(0,0,0,.45));
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,.40));
       user-select:none;
       -webkit-user-drag:none;
     }
 
     .actions{
-      margin-top:12px;
+      margin-top:auto;
+      padding:12px;
+      border-top:1px solid var(--line);
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      justify-content:flex-end;
     }
 
     .btn{
       appearance:none;
       border:1px solid var(--line2);
-      background: rgba(14,23,42,.55);
+      background: rgba(15,23,42,.55);
       color: rgba(234,240,255,.92);
       padding:10px 12px;
       border-radius: 12px;
@@ -287,11 +221,12 @@
       gap:8px;
       cursor:pointer;
       transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      white-space:nowrap;
     }
     .btn:hover{
       transform: translateY(-1px);
       border-color: rgba(255,255,255,.20);
-      background: rgba(14,23,42,.70);
+      background: rgba(15,23,42,.72);
     }
     .btn.primary{
       border-color: rgba(124,58,237,.45);
@@ -311,8 +246,8 @@
       padding:22px 14px;
     }
     .modal.open{display:block}
-    .modalInner{
-      max-width: 1280px;
+    .modal-inner{
+      max-width: 1200px;
       margin:0 auto;
       border:1px solid var(--line);
       border-radius: 18px;
@@ -321,7 +256,7 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 30px 120px rgba(0,0,0,.65);
     }
-    .modalBar{
+    .modal-bar{
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -331,27 +266,24 @@
       color:var(--muted);
       font-size:13px;
     }
-    .modalTitle{
+    .modal-title{
       display:flex; align-items:center; gap:10px;
       color:rgba(234,240,255,.88);
       font-weight:700;
     }
-    .modalBody{
+    .modal-body{
       background:#050712;
       padding:12px;
     }
-    .modalImg{
+    .modal-img{
       width:100%;
       height:auto;
       display:block;
       border-radius: 14px;
       cursor: zoom-out;
+      user-select:none;
+      -webkit-user-drag:none;
     }
-
-    /* Scrollbar discreta */
-    .list::-webkit-scrollbar{width:10px}
-    .list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10); border-radius:999px}
-    .list::-webkit-scrollbar-track{background:transparent}
   </style>
 </head>
 
@@ -363,74 +295,36 @@
           <div class="dot"></div>
           <div>
             <h1>Catálogo</h1>
-            <div class="sub">Seleccioná un combo y visualizá Links / Precios en grande.</div>
+            <div class="sub">Cada tarjeta muestra Links y Precios. Click en una imagen para ampliarla.</div>
           </div>
         </div>
 
-        <div class="headerRight">
-          <div class="pill" id="status">—</div>
+        <div class="controls">
+          <div class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 21l-4.3-4.3m1.3-5.2a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input id="q" type="text" placeholder="Buscar por nombre o número (ej: 03, ganamos)..." />
+          </div>
+          <div class="count" id="count">—</div>
         </div>
       </div>
     </div>
   </header>
 
-  <div class="layout">
-    <!-- Sidebar -->
-    <aside class="side">
-      <div class="sideHead">
-        <div class="search">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M21 21l-4.3-4.3m1.3-5.2a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <input id="q" type="text" placeholder="Buscar combo (ej: 03, 12)..." />
-        </div>
-        <div class="sideMeta">
-          <div id="count">—</div>
-          <div>Click para abrir</div>
-        </div>
-      </div>
+  <main class="wrap">
+    <div class="grid" id="grid"></div>
+  </main>
 
-      <div class="list" id="list"></div>
-    </aside>
-
-    <!-- Main viewer -->
-    <main class="main">
-      <div class="mainHead">
-        <div class="mainTitle">
-          <b id="comboTitle">Combo —</b>
-          <span id="comboSub">—</span>
-        </div>
-
-        <div class="tabs">
-          <div class="tab active" data-tab="links">Links</div>
-          <div class="tab" data-tab="precios">Precios</div>
-        </div>
-      </div>
-
-      <div class="viewer">
-        <div class="frame">
-          <div class="imgBox">
-            <img id="mainImg" src="" alt="Vista" />
-          </div>
-
-          <div class="actions">
-            <a class="btn primary" id="openBtn" href="#" target="_blank" rel="noopener">Abrir en nueva pestaña</a>
-            <button class="btn" id="copyBtn">Copiar URL</button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Modal zoom -->
+  <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
-    <div class="modalInner">
-      <div class="modalBar">
-        <div class="modalTitle"><span class="dot"></span><span id="modalTitle">Vista</span></div>
+    <div class="modal-inner">
+      <div class="modal-bar">
+        <div class="modal-title"><span class="miniDot"></span><span id="modalTitle">Vista</span></div>
         <button class="btn" id="closeBtn">Cerrar ✕</button>
       </div>
-      <div class="modalBody">
-        <img class="modalImg" id="modalImg" alt="Vista ampliada" />
+      <div class="modal-body">
+        <img id="modalImg" class="modal-img" alt="Vista ampliada" />
       </div>
     </div>
   </div>
@@ -439,148 +333,131 @@
     // ✅ Tu carpeta real
     const IMG_DIR = "imagenes";
 
-    // ✅ Cantidad de combos (si mañana son 20, cambiás acá)
-    const TOTAL = 14;
+    // ✅ Nombres EXACTOS que pediste (1..14)
+    const NAMES = [
+      "multi panel infinit",
+      "oro puro",
+      "fortuna total",
+      "multi panel grupo 91",
+      "multiskin",
+      "agentes bet paneles blancos",
+      "agentes bet lat",
+      "gana en casa",
+      "gran poseidon",
+      "multi panel con recupero",
+      "kona bet",
+      "ganamos",
+      "zeus",
+      "multi panel sin recupero"
+    ];
 
-    const items = Array.from({ length: TOTAL }, (_, i) => {
+    // Genera los items del 01 al 14
+    const items = Array.from({ length: 14 }, (_, i) => {
       const n = String(i + 1).padStart(2, "0");
       return {
         id: n,
+        name: NAMES[i] || ("combo " + n),
         linksImg: `${IMG_DIR}/c${n}_links.jpg`,
         preciosImg: `${IMG_DIR}/c${n}_precios.jpg`,
       };
     });
 
-    const listEl = document.getElementById("list");
+    const grid = document.getElementById("grid");
     const q = document.getElementById("q");
     const count = document.getElementById("count");
-    const status = document.getElementById("status");
-
-    const comboTitle = document.getElementById("comboTitle");
-    const comboSub = document.getElementById("comboSub");
-    const mainImg = document.getElementById("mainImg");
-    const openBtn = document.getElementById("openBtn");
-    const copyBtn = document.getElementById("copyBtn");
 
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modalImg");
     const modalTitle = document.getElementById("modalTitle");
     const closeBtn = document.getElementById("closeBtn");
 
-    let current = items[0];
-    let currentTab = "links";
-
-    function renderList(list){
-      listEl.innerHTML = "";
-      list.forEach(it => {
-        const div = document.createElement("div");
-        div.className = "item" + (it.id === current.id ? " active" : "");
-        div.innerHTML = `
-          <div class="itemLeft">
-            <div class="itemTitle">Combo ${it.id}</div>
-            <div class="itemSub">Links + Precios</div>
-          </div>
-          <div class="chip">Abrir</div>
-        `;
-        div.addEventListener("click", () => {
-          current = it;
-          syncActive();
-          showCurrent();
-        });
-        listEl.appendChild(div);
-      });
-      count.textContent = `${list.length} / ${items.length} combos`;
-    }
-
-    function syncActive(){
-      listEl.querySelectorAll(".item").forEach(el => el.classList.remove("active"));
-      const idx = items.findIndex(x => x.id === current.id);
-      // Re-render es más seguro por filtro; hacemos update simple:
-      // (si estás filtrando, se re-renderiza igual)
-    }
-
-    function showCurrent(){
-      comboTitle.textContent = `Combo ${current.id}`;
-      comboSub.textContent = `Archivos: c${current.id}_links.jpg / c${current.id}_precios.jpg`;
-
-      const src = (currentTab === "links") ? current.linksImg : current.preciosImg;
-
-      mainImg.src = src;
-      mainImg.setAttribute("data-title", `Combo ${current.id} — ${currentTab === "links" ? "Links" : "Precios"}`);
-      openBtn.href = src;
-
-      // Estado arriba
-      status.textContent = `Viendo: Combo ${current.id} • ${currentTab === "links" ? "Links" : "Precios"}`;
-    }
-
-    function setTab(tab){
-      currentTab = tab;
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      document.querySelector(`.tab[data-tab="${tab}"]`).classList.add("active");
-      showCurrent();
-    }
-
-    // Tabs
-    document.querySelectorAll(".tab").forEach(t => {
-      t.addEventListener("click", () => setTab(t.dataset.tab));
-    });
-
-    // Buscar
-    q.addEventListener("input", () => {
-      const term = q.value.trim();
-      if(!term){
-        renderList(items);
-        // marcar activo visual al re-render
-        markActiveInList();
-        return;
-      }
-      const filtered = items.filter(it => it.id.includes(term));
-      renderList(filtered);
-      markActiveInList();
-    });
-
-    function markActiveInList(){
-      // Marca el item activo si está visible
-      const nodes = [...listEl.querySelectorAll(".item")];
-      nodes.forEach((node, i) => {
-        const txt = node.querySelector(".itemTitle")?.textContent || "";
-        if (txt.includes(current.id)) node.classList.add("active");
-      });
-    }
-
-    // Copy
-    copyBtn.addEventListener("click", async () => {
-      const url = openBtn.href;
-      try{
-        await navigator.clipboard.writeText(url);
-        const old = copyBtn.textContent;
-        copyBtn.textContent = "Copiado ✓";
-        setTimeout(()=> copyBtn.textContent = old, 900);
-      }catch(e){
-        alert("No pude copiar automáticamente. Copiá este link:\n" + url);
-      }
-    });
-
-    // Zoom modal
-    mainImg.addEventListener("click", () => {
+    function openModal(src, title){
       modal.classList.add("open");
       modal.setAttribute("aria-hidden","false");
-      modalImg.src = mainImg.src;
-      modalTitle.textContent = mainImg.getAttribute("data-title") || "Vista";
-    });
+      modalImg.src = src;
+      modalTitle.textContent = title;
+    }
     function closeModal(){
       modal.classList.remove("open");
       modal.setAttribute("aria-hidden","true");
       modalImg.src = "";
     }
-    closeBtn.addEventListener("click", closeModal);
-    modal.addEventListener("click", (e) => { if(e.target === modal || e.target === modalImg) closeModal(); });
-    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeModal(); });
 
-    // Init
-    renderList(items);
-    markActiveInList();
-    showCurrent();
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if(e.target === modal || e.target === modalImg) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeModal();
+    });
+
+    function render(list){
+      grid.innerHTML = "";
+
+      list.forEach(it => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-head">
+            <div class="title">
+              <b>${it.name}</b>
+              <span>ID: ${it.id}</span>
+            </div>
+            <div class="badge">Combo ${it.id}</div>
+          </div>
+
+          <div class="pair">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="left"><span class="miniDot"></span>Links</div>
+                <div>Click para ampliar</div>
+              </div>
+              <div class="frame">
+                <img src="${it.linksImg}" alt="Links ${it.id}" data-title="${it.name} — Links" loading="lazy"/>
+              </div>
+              <div class="actions">
+                <a class="btn primary" href="${it.linksImg}" target="_blank" rel="noopener">Abrir Links</a>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div class="left"><span class="miniDot"></span>Precios</div>
+                <div>Click para ampliar</div>
+              </div>
+              <div class="frame">
+                <img src="${it.preciosImg}" alt="Precios ${it.id}" data-title="${it.name} — Precios" loading="lazy"/>
+              </div>
+              <div class="actions">
+                <a class="btn primary" href="${it.preciosImg}" target="_blank" rel="noopener">Abrir Precios</a>
+              </div>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // click zoom
+      grid.querySelectorAll(".frame img").forEach(img => {
+        img.addEventListener("click", () => openModal(img.src, img.dataset.title || "Vista"));
+      });
+
+      count.textContent = `${list.length} / ${items.length}`;
+    }
+
+    // búsqueda por nombre o número
+    q.addEventListener("input", () => {
+      const term = q.value.trim().toLowerCase();
+      if(!term) return render(items);
+
+      const filtered = items.filter(it => {
+        return it.id.includes(term) || it.name.toLowerCase().includes(term);
+      });
+      render(filtered);
+    });
+
+    render(items);
   </script>
 </body>
 </html>
