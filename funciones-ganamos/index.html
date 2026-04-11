@@ -4,115 +4,167 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Funciones Ganamos</title>
+
   <style>
-    *{box-sizing:border-box}
+    * { box-sizing: border-box; }
 
-    body{
-      margin:0;
-      font-family:Arial, sans-serif;
-      background:#0b1635;
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      padding:18px 10px 30px;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #071738;
+      color: white;
     }
 
-    .wrap{
-      width:100%;
-      max-width:760px;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 23, 56, 0.96);
+      backdrop-filter: blur(8px);
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
-    .top-buttons{
-      position:sticky;
-      top:12px;
-      z-index:20;
-      display:flex;
-      gap:12px;
-      justify-content:center;
-      margin-bottom:14px;
+    .topbar-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    .btn{
-      text-decoration:none;
-      font-weight:700;
-      font-size:18px;
-      border-radius:16px;
-      padding:16px 22px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:190px;
-      box-shadow:0 10px 24px rgba(0,0,0,.25);
+    .btn {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+      border-radius: 16px;
+      padding: 15px 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 220px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.20);
     }
 
-    .download{
-      background:#fff;
-      color:#111;
+    .btn-download {
+      background: #fff;
+      color: #111;
     }
 
-    .whatsapp{
-      background:#25D366;
-      color:#fff;
+    .btn-whatsapp {
+      background: #25D366;
+      color: #fff;
     }
 
-    .pdf-view{
-      display:block;
-      width:100%;
-      border-radius:18px;
-      overflow:hidden;
-      box-shadow:0 14px 30px rgba(0,0,0,.35);
-      background:#1b1038;
+    .viewer {
+      max-width: 980px;
+      margin: 18px auto 40px;
+      padding: 0 10px;
     }
 
-    .pdf-view img{
-      display:block;
-      width:100%;
-      height:auto;
+    .page {
+      margin: 0 auto 18px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.28);
     }
 
-    .hint{
-      text-align:center;
-      color:#d9def0;
-      font-size:14px;
-      margin-top:12px;
-      opacity:.9;
+    .page canvas {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
-    @media (max-width: 640px){
-      .top-buttons{
-        gap:10px;
+    .loading {
+      text-align: center;
+      color: rgba(255,255,255,.85);
+      font-size: 16px;
+      padding: 30px 10px;
+    }
+
+    @media (max-width: 640px) {
+      .btn {
+        width: 100%;
+        min-width: 0;
+        font-size: 17px;
+        padding: 14px 16px;
       }
 
-      .btn{
-        min-width:0;
-        width:48%;
-        font-size:16px;
-        padding:14px 10px;
+      .viewer {
+        padding: 0 8px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
 
-    <div class="top-buttons">
-      <a class="btn download" href="/funciones-ganamos/funciones-ganamos.pdf" download>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="btn btn-download" href="/funciones-ganamos/funciones-ganamos.pdf" download>
         Descargar PDF
       </a>
 
-      <a class="btn whatsapp" href="https://wa.me/541168722199" target="_blank" rel="noopener noreferrer">
+      <a class="btn btn-whatsapp" href="https://wa.me/541168722199" target="_blank" rel="noopener noreferrer">
         Contactanos
       </a>
     </div>
-
-    <a class="pdf-view" href="/funciones-ganamos/funciones-ganamos.pdf" target="_blank" rel="noopener noreferrer">
-      <img src="/funciones-ganamos/preview.jpg" alt="Vista previa del manual Funciones Ganamos">
-    </a>
-
-    <div class="hint">
-      Tocá la imagen para abrir el manual completo.
-    </div>
-
   </div>
+
+  <div class="viewer">
+    <div class="loading" id="loading">Cargando manual...</div>
+    <div id="pdf-container"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
+  <script>
+    const url = '/funciones-ganamos/funciones-ganamos.pdf';
+    const container = document.getElementById('pdf-container');
+    const loading = document.getElementById('loading');
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js';
+
+    async function renderPDF() {
+      try {
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        loading.style.display = 'none';
+
+        const isMobile = window.innerWidth < 768;
+        const targetWidth = isMobile ? window.innerWidth - 24 : 900;
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const viewport = page.getViewport({ scale: 1 });
+          const scale = targetWidth / viewport.width;
+          const scaledViewport = page.getViewport({ scale });
+
+          const pageWrap = document.createElement('div');
+          pageWrap.className = 'page';
+
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+
+          canvas.width = scaledViewport.width;
+          canvas.height = scaledViewport.height;
+
+          pageWrap.appendChild(canvas);
+          container.appendChild(pageWrap);
+
+          await page.render({
+            canvasContext: context,
+            viewport: scaledViewport
+          }).promise;
+        }
+      } catch (error) {
+        loading.innerHTML = 'No se pudo cargar el manual.';
+        console.error(error);
+      }
+    }
+
+    renderPDF();
+  </script>
+
 </body>
 </html>
