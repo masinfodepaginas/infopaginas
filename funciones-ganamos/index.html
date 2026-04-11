@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Funciones Ganamos</title>
-
   <style>
     * { box-sizing: border-box; }
 
@@ -57,31 +56,26 @@
       color: #fff;
     }
 
-    .viewer {
-      max-width: 980px;
-      margin: 18px auto 40px;
-      padding: 0 10px;
+    .viewer-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 10px 24px;
     }
 
-    .page {
-      margin: 0 auto 18px;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
+    .viewer-frame {
+      width: 100%;
+      height: calc(100vh - 110px);
+      border: none;
+      border-radius: 12px;
+      background: #fff;
       box-shadow: 0 10px 30px rgba(0,0,0,.28);
     }
 
-    .page canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .loading {
+    .fallback {
       text-align: center;
       color: rgba(255,255,255,.85);
-      font-size: 16px;
-      padding: 30px 10px;
+      font-size: 14px;
+      margin-top: 12px;
     }
 
     @media (max-width: 640px) {
@@ -92,8 +86,8 @@
         padding: 14px 16px;
       }
 
-      .viewer {
-        padding: 0 8px;
+      .viewer-frame {
+        height: calc(100vh - 150px);
       }
     }
   </style>
@@ -112,59 +106,16 @@
     </div>
   </div>
 
-  <div class="viewer">
-    <div class="loading" id="loading">Cargando manual...</div>
-    <div id="pdf-container"></div>
+  <div class="viewer-wrap">
+    <iframe
+      class="viewer-frame"
+      src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://infopaginas.vercel.app/funciones-ganamos/funciones-ganamos.pdf">
+    </iframe>
+
+    <div class="fallback">
+      Si el visor tarda en cargar, podés usar el botón <strong>Descargar PDF</strong>.
+    </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
-  <script>
-    const url = '/funciones-ganamos/funciones-ganamos.pdf';
-    const container = document.getElementById('pdf-container');
-    const loading = document.getElementById('loading');
-
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js';
-
-    async function renderPDF() {
-      try {
-        const pdf = await pdfjsLib.getDocument(url).promise;
-        loading.style.display = 'none';
-
-        const isMobile = window.innerWidth < 768;
-        const targetWidth = isMobile ? window.innerWidth - 24 : 900;
-
-        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-          const page = await pdf.getPage(pageNum);
-          const viewport = page.getViewport({ scale: 1 });
-          const scale = targetWidth / viewport.width;
-          const scaledViewport = page.getViewport({ scale });
-
-          const pageWrap = document.createElement('div');
-          pageWrap.className = 'page';
-
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-
-          canvas.width = scaledViewport.width;
-          canvas.height = scaledViewport.height;
-
-          pageWrap.appendChild(canvas);
-          container.appendChild(pageWrap);
-
-          await page.render({
-            canvasContext: context,
-            viewport: scaledViewport
-          }).promise;
-        }
-      } catch (error) {
-        loading.innerHTML = 'No se pudo cargar el manual.';
-        console.error(error);
-      }
-    }
-
-    renderPDF();
-  </script>
 
 </body>
 </html>
