@@ -4,24 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Funciones Ganamos</title>
+
   <style>
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      padding: 0;
       background: #071738;
+      font-family: Arial, sans-serif;
       color: white;
+    }
+
+    body {
+      min-height: 100vh;
     }
 
     .topbar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(7, 23, 56, 0.96);
-      backdrop-filter: blur(8px);
+      background: rgba(7, 23, 56, 0.98);
       padding: 14px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     .topbar-inner {
@@ -57,25 +62,26 @@
     }
 
     .viewer-wrap {
+      width: 100%;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 18px 10px 24px;
+      padding: 0;
+      background: #071738;
     }
 
     .viewer-frame {
       width: 100%;
-      height: calc(100vh - 110px);
+      height: calc(100vh - 105px);
       border: none;
-      border-radius: 12px;
-      background: #fff;
-      box-shadow: 0 10px 30px rgba(0,0,0,.28);
+      display: block;
+      background: #071738;
     }
 
     .fallback {
       text-align: center;
-      color: rgba(255,255,255,.85);
+      color: rgba(255,255,255,.82);
       font-size: 14px;
-      margin-top: 12px;
+      padding: 10px 14px 18px;
     }
 
     @media (max-width: 640px) {
@@ -107,13 +113,12 @@
   </div>
 
   <div class="viewer-wrap">
-    <iframe
+    <embed
       class="viewer-frame"
-      src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://infopaginas.vercel.app/funciones-ganamos/funciones-ganamos.pdf">
-    </iframe>
-
+      src="/funciones-ganamos/funciones-ganamos.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+      type="application/pdf">
     <div class="fallback">
-      Si el visor tarda en cargar, podés usar el botón <strong>Descargar PDF</strong>.
+      Si tu navegador muestra controles propios del visor, eso depende del celular. El botón Descargar PDF siempre queda disponible.
     </div>
   </div>
 
